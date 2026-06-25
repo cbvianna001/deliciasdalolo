@@ -5,106 +5,63 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Delícias da Lolo ✨</title>
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
-    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600&display=swap" rel="stylesheet">
     <style>
-        :root { --primary: #E6A8B5; --dark: #121212; --card-bg: #1e1e1e; }
-        body { background: var(--dark); color: #fff; font-family: 'Poppins', sans-serif; margin: 0; padding-bottom: 80px; }
+        :root { --primary: #E6A8B5; --dark: #121212; }
+        body { background: var(--dark); color: white; font-family: sans-serif; margin: 0; padding-bottom: 100px; }
         header { text-align: center; padding: 40px 20px; }
-        
-        .grid { 
-            display: grid; 
-            grid-template-columns: repeat(auto-fill, minmax(160px, 1fr)); 
-            gap: 15px; 
-            padding: 20px; 
-            max-width: 600px; 
-            margin: auto; 
-        }
-
-        .card { 
-            background: var(--card-bg); 
-            border-radius: 20px; 
-            padding: 12px; 
-            text-align: center; 
-            border: 1px solid #333;
-        }
-
-        .card img { 
-            width: 100%; height: 120px; 
-            object-fit: cover; border-radius: 15px; margin-bottom: 10px;
-        }
-
-        .btn-add { 
-            background: var(--primary); color: #000; 
-            border: none; padding: 10px; border-radius: 10px; 
-            width: 100%; font-weight: bold; cursor: pointer;
-        }
-
-        #cart-bar { 
-            position: fixed; bottom: 0; width: 100%; 
-            background: var(--primary); color: #000; 
-            text-align: center; padding: 15px; font-weight: bold; 
-            cursor: pointer; z-index: 99; display: none;
-        }
-
-        .modal { 
-            position: fixed; top: 0; left: 0; width: 100%; height: 100%; 
-            background: rgba(0,0,0,0.95); display: none; padding: 20px; overflow-y: auto;
-        }
+        #logo { width: 120px; height: 120px; border-radius: 50%; border: 3px solid var(--primary); object-fit: cover; }
+        .grid { display: grid; grid-template-columns: 1fr 1fr; gap: 15px; padding: 20px; }
+        .card { background: #1e1e1e; padding: 15px; border-radius: 20px; text-align: center; }
+        .btn { background: var(--primary); color: #000; border: none; padding: 10px; border-radius: 10px; width: 100%; font-weight: bold; margin-top: 10px; }
+        footer { text-align: center; padding: 40px; color: #666; }
+        #cart-bar { position: fixed; bottom: 0; width: 100%; background: var(--primary); color: #000; text-align: center; padding: 15px; font-weight: bold; cursor: pointer; display: none; }
     </style>
 </head>
 <body>
 
     <header>
+        <img src="logo.png" id="logo" onerror="this.style.display='none'">
         <h1 id="shop-title">Delícias da Lolo</h1>
-        <p>✨ Doçura artesanal em cada detalhe</p>
+        <p>✨ Doçura artesanal</p>
+        <a href="https://instagram.com/dalolodelicias" style="color:var(--primary); text-decoration:none;">Instagram: @dalolodelicias</a>
     </header>
 
     <div class="grid" id="products-grid"></div>
 
     <div id="cart-bar" onclick="openModal()">Ver Carrinho</div>
 
-    <div id="modal" class="modal">
-        <div style="max-width: 400px; margin: auto;">
-            <h2>Finalizar Pedido</h2>
-            <div id="cart-items" style="margin-bottom:20px;"></div>
-            <input type="text" id="nome" placeholder="Seu Nome" style="width:100%; padding:10px; margin-bottom:10px;">
-            <input type="text" id="end" placeholder="Seu Endereço" style="width:100%; padding:10px; margin-bottom:10px;">
-            <button class="btn-add" onclick="finalizar()">Enviar Pedido no WhatsApp</button>
-            <button onclick="document.getElementById('modal').style.display='none'" style="width:100%; margin-top:10px; background:none; color:white; border:none;">Fechar</button>
-        </div>
+    <footer>
+        <p>Siga também: <a href="https://instagram.com/systemsjc_" style="color:white">@systemsjc_</a></p>
+    </footer>
+
+    <div id="modal" style="display:none; position:fixed; top:0; left:0; width:100%; height:100%; background:black; padding:20px;">
+        <h2>Finalizar Pedido</h2>
+        <div id="cart-items"></div>
+        <input type="text" id="nome" placeholder="Seu Nome" style="width:100%; padding:10px; margin-bottom:10px;">
+        <button class="btn" onclick="finalizar()">Enviar Pedido no WhatsApp</button>
+        <button onclick="document.getElementById('modal').style.display='none'" class="btn" style="background:#444">Fechar</button>
     </div>
 
     <script>
-        // --- COLE O SEU LINK RAW DO GITHUB ABAIXO ---
+        // SUBSTITUA ESTE LINK PELO SEU LINK RAW DO GITHUB
         const JSON_URL = 'https://raw.githubusercontent.com/cbvianna001/deliciasdalolo/refs/heads/main/cardapio.json'; 
-        let cart = [], menuData = [], shopPhone = "5512988203278";
+        let cart = [];
 
         async function load() {
             try {
                 const res = await fetch(JSON_URL);
                 const data = await res.json();
-                menuData = data.menu;
                 const grid = document.getElementById('products-grid');
-                menuData.forEach((i, idx) => {
-                    grid.innerHTML += `<div class="card"><img src="${i.image}"><h3 style="font-size:14px">${i.name}</h3><p>R$ ${i.price}</p><button class="btn-add" onclick="addToCart(${idx})">Adicionar</button></div>`;
+                data.menu.forEach((i, idx) => {
+                    grid.innerHTML += `<div class="card"><img src="${i.image}" style="width:100%; height:100px; object-fit:cover; border-radius:10px;"><h3 style="font-size:14px">${i.name}</h3><p>R$ ${i.price}</p><button class="btn" onclick="addToCart(${idx})">Adicionar</button></div>`;
                 });
-            } catch(e) { console.error(e); }
+            } catch(e) { document.getElementById('shop-title').innerText = "Erro ao carregar cardápio"; }
         }
 
-        function addToCart(idx) { cart.push(menuData[idx]); document.getElementById('cart-bar').style.display = 'block'; }
-
-        function openModal() {
-            document.getElementById('modal').style.display = 'block';
-            document.getElementById('cart-items').innerHTML = cart.map(i => `<p>${i.name} - R$ ${i.price}</p>`).join('');
-        }
-
-        function finalizar() {
-            const nome = document.getElementById('nome').value;
-            const end = document.getElementById('end').value;
-            const msg = `Pedido de: ${nome}%0AEndereço: ${end}%0AItens: ${cart.map(i=>i.name).join(', ')}`;
-            window.open(`https://wa.me/${shopPhone}?text=${msg}`, '_blank');
-        }
-
+        function addToCart(idx) { cart.push(idx); document.getElementById('cart-bar').style.display = 'block'; }
+        function openModal() { document.getElementById('modal').style.display = 'block'; }
+        function finalizar() { window.open(`https://wa.me/5512988203278?text=Pedido+iniciado`); }
+        
         load();
     </script>
 </body>
