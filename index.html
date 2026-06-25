@@ -3,207 +3,108 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Delícias da Lolo | Doçura Artesanal</title>
+    <title>Delícias da Lolo ✨</title>
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
-    <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;700;800&family=Pacifico&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600&family=Pacifico&display=swap" rel="stylesheet">
     <style>
-        :root { 
-            --chocolate: #5D3A3A; 
-            --rose: #F2BAC9; 
-            --rose-dark: #E6A8B5; 
-            --bg-dark: #121212; 
-            --card-soft: #FFF5f7; /* Um branco rosado bem fofinho */
-            font-family: 'Nunito', sans-serif; 
+        :root {
+            --primary: #E6A8B5;
+            --dark: #121212;
+            --glass: rgba(255, 255, 255, 0.05);
+            --text: #ffffff;
         }
 
         body { 
-            background-color: var(--bg-dark); 
-            color: #fff; 
-            margin: 0; 
-            padding-bottom: 50px;
-            background-image: radial-gradient(#222 1px, transparent 1px);
-            background-size: 20px 20px; /* Pontinhos discretos no fundo */
+            background: var(--dark); 
+            color: var(--text); 
+            font-family: 'Poppins', sans-serif;
+            margin: 0; padding: 0;
+            background: radial-gradient(circle at top, #2b2b2b, #000);
+            min-height: 100vh;
         }
 
-        /* Header flutuante e fofo */
-        header { 
-            padding: 40px 20px; 
-            text-align: center; 
-            background: transparent;
-        }
-
+        header { padding: 50px 20px; text-align: center; }
+        
         #shop-logo-img { 
-            width: 120px; height: 120px; 
-            border-radius: 50%; 
-            object-fit: cover; 
-            border: 4px solid var(--rose); 
-            margin-bottom: 15px; 
-            box-shadow: 0 0 20px rgba(242, 186, 201, 0.3);
-            display: block; margin-left: auto; margin-right: auto;
+            width: 130px; height: 130px; border-radius: 50%; 
+            border: 4px solid var(--primary); box-shadow: 0 0 30px rgba(230,168,181,0.4);
+            object-fit: cover; margin-bottom: 20px;
         }
 
-        #shop-title { 
-            font-family: 'Pacifico', cursive; 
-            font-size: 2.2rem; 
-            color: var(--rose); 
-            margin: 0; 
-            text-shadow: 2px 2px 4px rgba(0,0,0,0.5);
+        h1 { font-family: 'Pacifico', cursive; color: var(--primary); font-size: 2.5rem; margin: 0; }
+        
+        .recipe-box { 
+            background: var(--glass); backdrop-filter: blur(10px);
+            padding: 20px; border-radius: 20px; max-width: 350px; margin: 20px auto;
+            border: 1px solid rgba(255,255,255,0.1);
         }
 
-        .slogan {
-            font-size: 1.1rem;
-            color: #d1d1d1;
-            margin: 10px 0;
-            font-style: italic;
-        }
+        .grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(160px, 1fr)); gap: 15px; padding: 20px; max-width: 800px; margin: auto; }
 
-        .insta-link {
-            display: inline-block;
-            margin-top: 10px;
-            text-decoration: none; 
-            color: var(--rose-dark); 
-            font-weight: bold;
-            background: rgba(230, 168, 181, 0.1);
-            padding: 8px 15px;
-            border-radius: 20px;
-            transition: 0.3s;
-        }
-
-        .recipe-alert {
-            background: #fff;
-            color: var(--chocolate);
-            margin: 20px auto;
-            padding: 10px;
-            border-radius: 15px;
-            font-size: 0.9rem;
-            max-width: 300px;
-            border-left: 5px solid var(--rose);
-            box-shadow: 0 4px 10px rgba(0,0,0,0.3);
-        }
-
-        .container { max-width: 800px; margin: 0 auto; padding: 15px; }
-        .grid { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; }
-
-        /* Cards mais fofos */
         .card { 
-            background: var(--card-soft); 
-            border-radius: 30px; /* Bordas bem redondas */
-            overflow: hidden; 
-            display: flex; 
-            flex-direction: column; 
-            box-shadow: 0 8px 20px rgba(0,0,0,0.4);
-            border: none;
-            transition: transform 0.3s;
+            background: var(--glass); backdrop-filter: blur(5px);
+            border-radius: 25px; padding: 15px; text-align: center;
+            transition: 0.4s; border: 1px solid rgba(255,255,255,0.05);
         }
 
-        .card:hover { transform: translateY(-5px); }
+        .card:hover { transform: translateY(-10px); border-color: var(--primary); }
 
-        .card img { width: 100%; height: 150px; object-fit: cover; }
+        .card img { width: 100%; height: 120px; border-radius: 20px; object-fit: cover; margin-bottom: 10px; }
 
-        .card-body { 
-            padding: 15px; 
-            flex: 1; 
-            display: flex; 
-            flex-direction: column; 
-            text-align: center;
+        .btn-pedir { 
+            background: var(--primary); color: #000; border: none; padding: 10px 20px;
+            border-radius: 15px; font-weight: 600; cursor: pointer; width: 100%; margin-top: 10px;
         }
 
-        .card h3 { color: var(--chocolate); margin: 0 0 10px 0; font-size: 1.2rem; }
-        .card b { color: var(--rose-dark); font-size: 1.3rem; margin-bottom: 15px; display: block;}
-
-        .add-btn { 
-            background: var(--rose); 
-            color: #fff; 
-            padding: 12px; 
-            border-radius: 20px; 
-            cursor: pointer; 
-            border: none; 
-            font-weight: 800; 
-            text-transform: uppercase;
-            letter-spacing: 1px;
-            transition: 0.3s;
-        }
-
-        .add-btn:hover { background: var(--chocolate); }
-
-        .credits { text-align: center; margin-top: 50px; font-size: 0.8rem; color: #666; }
-        .credits a { color: var(--rose-dark); text-decoration: none; font-weight: bold; }
-
-        @media (max-width: 480px) {
-            .grid { grid-template-columns: 1fr; }
-            #shop-title { font-size: 1.8rem; }
-        }
+        .credits { text-align: center; padding: 40px; color: #555; font-size: 0.8rem; }
     </style>
 </head>
 <body>
 
     <header>
         <img src="logo.png" id="shop-logo-img" onerror="this.style.display='none'">
-        <h1 id="shop-title">Carregando...</h1>
-        <p class="slogan">✨ Doses extras de amor e açúcar em cada mordida!</p>
+        <h1 id="shop-title">Delícias da Lolo</h1>
+        <p>✨ Doçura artesanal em cada detalhe</p>
         
-        <a href="https://instagram.com/dalolodelicias" target="_blank" class="insta-link">
-            <i class="fab fa-instagram"></i> @dalolodelicias
-        </a>
-
-        <div class="recipe-alert">
-            📸 No nosso Instagram postamos <b>receitinhas fofas</b> e o dia a dia da Lolo! Siga a gente! 🌸
+        <div class="recipe-box">
+            📸 Siga <b>@dalolodelicias</b> para receitinhas fofas e bastidores!
         </div>
     </header>
 
-    <div class="container">
-        <div id="products-grid" class="grid"></div>
-    </div>
+    <div class="grid" id="products-grid"></div>
 
-    <div class="credits">
-        <p>Criado com carinho por <a href="https://instagram.com/systemsjc_" target="_blank">@systemsjc_</a></p>
-    </div>
+    <div class="credits">Feito com amor por @systemsjc_</div>
 
     <script>
-        // --- COPIE O SEU LINK "RAW" DO GITHUB E COLE AQUI ABAIXO ---
-        const JSON_URL = 'https://raw.githubusercontent.com/cbvianna001/deliciasdalolo/refs/heads/main/cardapio.json'; 
-        
-        let menuData = [], shopData = {};
+        const JSON_URL = 'COLE_SEU_LINK_RAW_DO_GITHUB_AQUI';
+        const WHATSAPP = '5512988203278';
 
         async function carregarCardapio() {
             try {
                 const response = await fetch(JSON_URL);
-                if (!response.ok) throw new Error("Erro");
                 const data = await response.json();
                 
-                shopData = data.config;
-                document.getElementById('shop-title').innerText = shopData.name;
+                document.getElementById('shop-title').innerText = data.config.name;
+                const grid = document.getElementById('products-grid');
                 
-                menuData = Object.keys(data.menu).map(k => ({id: k, ...data.menu[k]}));
-                renderMenu();
-            } catch (e) {
-                document.getElementById('shop-title').innerText = "Delícias da Lolo";
-            }
-        }
-
-        function renderMenu() {
-            const grid = document.getElementById('products-grid'); 
-            grid.innerHTML = '';
-            menuData.forEach(i => {
-                grid.innerHTML += `
-                    <div class="card">
-                        <img src="${i.image}" onerror="this.src='https://via.placeholder.com/150?text=Doce+Fofinho'">
-                        <div class="card-body">
-                            <h3>${i.name}</h3>
-                            <b>R$ ${parseFloat(i.price).toFixed(2)}</b>
-                            <button class="add-btn" onclick="pedir('${i.name}')">Quero essa delícia! ✨</button>
-                        </div>
-                    </div>`;
-            });
+                Object.values(data.menu).forEach(i => {
+                    grid.innerHTML += `
+                        <div class="card">
+                            <img src="${i.image}">
+                            <h3 style="margin:10px 0 5px">${i.name}</h3>
+                            <p style="color:var(--primary); font-weight:bold">R$ ${i.price}</p>
+                            <button class="btn-pedir" onclick="pedir('${i.name}')">Pedir Agora</button>
+                        </div>`;
+                });
+            } catch (e) { document.getElementById('shop-title').innerText = "Cardápio indisponível"; }
         }
 
         window.pedir = (nome) => {
-            const phone = shopData.phone.replace(/\D/g,'');
-            const texto = encodeURIComponent(`Olá! Vi no cardápio e fiquei apaixonada por: ${nome}. Poderia me atender? ✨`);
-            window.open(`https://wa.me/${phone}?text=${texto}`, '_blank');
+            window.open(`https://wa.me/${WHATSAPP}?text=Olá, quero pedir: ${nome}`, '_blank');
         }
 
         carregarCardapio();
     </script>
 </body>
 </html>
+            
