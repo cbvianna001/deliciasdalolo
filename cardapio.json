@@ -1,6 +1,6 @@
 {
   "menu": [
-    {"name": "Mousse", "price": 10.0, "image": "URL_DA_IMAGEM"},
-    {"name": "Pavê", "price": 12.0, "image": "URL_DA_IMAGEM"}
+    {"name": "Mousse", "price": 10.0, "image": "https://bakeandcakegourmet.com.br/uploads/site/receitas/mousse-de-maracuja-com-chocolate-branco-4-8zrgzjre_4x3.jpg"},
+    {"name": "Pavê", "price": 12.0, "image": "https://www.sabornamesa.com.br/media/k2/items/cache/e2ead9c1349a48396463990fe7b55a21_XL.jpg"}
   ]
 }
