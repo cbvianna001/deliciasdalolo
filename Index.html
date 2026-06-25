@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Delícias da Lolo</title>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;700;800&display=swap" rel="stylesheet">
+    <style>
+        :root { 
+            --chocolate: #7B4B3A; 
+            --rose: #E6A8B5; 
+            --rose-dark: #C98693; 
+            --cream-bg: #121212; 
+            --white: #ffffff; 
+            font-family: 'Nunito', sans-serif; 
+        }
+        body { background: var(--cream-bg); color: var(--chocolate); margin: 0; padding-bottom: 90px; }
+        header { background: var(--white); padding: 25px; text-align: center; border-radius: 0 0 30px 30px; box-shadow: 0 4px 15px rgba(0,0,0,0.3); }
+        #shop-logo-img { width: 100px; height: 100px; border-radius: 50%; object-fit: cover; border: 3px solid var(--rose); margin-bottom: 10px; display: block; margin-left: auto; margin-right: auto; }
+        .container { max-width: 800px; margin: 0 auto; padding: 15px; }
+        .grid { display: grid; grid-template-columns: 1fr 1fr; gap: 15px; }
+        .card { background: var(--white); border-radius: 20px; overflow: hidden; display: flex; flex-direction: column; box-shadow: 0 4px 12px rgba(0,0,0,0.2); }
+        .card img { width: 100%; height: 130px; object-fit: cover; }
+        .card-body { padding: 12px; flex: 1; display: flex; flex-direction: column; }
+        .add-btn { background: var(--rose); color: var(--chocolate); padding: 10px; border-radius: 12px; cursor: pointer; border: none; font-weight: 700; margin-top: auto; }
+        .credits { text-align: center; margin-top: 40px; font-size: 0.9rem; color: #888; padding-bottom: 20px; }
+        .credits a { color: var(--rose); text-decoration: none; font-weight: bold; }
+        .nav-cats { overflow-x: auto; white-space: nowrap; padding: 20px 15px; position: sticky; top: 0; background: var(--cream-bg); display: flex; gap: 10px; }
+        .cat-btn { border: 2px solid var(--rose); background: var(--white); padding: 10px 18px; border-radius: 25px; font-weight: 700; color: var(--rose-dark); cursor: pointer; }
+    </style>
+</head>
+<body>
+
+    <header>
+        <img src="logo.png" id="shop-logo-img" onerror="this.style.display='none'">
+        <h2 id="shop-title" style="margin:0; font-weight:800; color:var(--chocolate);">Carregando...</h2>
+        <a href="https://instagram.com/dalolodelicias" target="_blank" style="text-decoration:none; color:var(--rose-dark); font-weight:bold;">
+            <i class="fab fa-instagram"></i> @dalolodelicias
+        </a>
+    </header>
+
+    <div id="category-container" class="nav-cats"></div>
+
+    <div class="container">
+        <div id="products-grid" class="grid"></div>
+    </div>
+
+    <div class="credits">
+        <p>Desenvolvido por <a href="https://instagram.com/systemsjc_" target="_blank">@systemsjc_</a></p>
+    </div>
+
+    <script>
+        // --- COPIE O SEU LINK "RAW" DO GITHUB E COLE AQUI ABAIXO ---
+        const JSON_URL = 'https://raw.githubusercontent.com/cbvianna001/delicias-da-lolo/refs/heads/main/cardapio.json';
+        
+        let menuData = [], shopData = {};
+
+        async function carregarCardapio() {
+            try {
+                const response = await fetch(JSON_URL);
+                if (!response.ok) throw new Error("Erro ao acessar JSON");
+                const data = await response.json();
+                
+                shopData = data.config;
+                document.getElementById('shop-title').innerText = shopData.name;
+                
+                menuData = Object.keys(data.menu).map(k => ({id: k, ...data.menu[k]}));
+                renderMenu('Todos');
+            } catch (e) {
+                document.getElementById('shop-title').innerText = "Erro ao carregar cardápio";
+            }
+        }
+
+        function renderMenu(cat) {
+            const grid = document.getElementById('products-grid'); 
+            grid.innerHTML = '';
+            menuData.filter(i => cat === 'Todos' || i.category === cat).forEach(i => {
+                grid.innerHTML += `
+                    <div class="card">
+                        <img src="${i.image}" onerror="this.src='https://via.placeholder.com/150'">
+                        <div class="card-body">
+                            <h3>${i.name}</h3>
+                            <b>R$ ${parseFloat(i.price).toFixed(2)}</b>
+                            <button class="add-btn" onclick="pedir('${i.name}')">Pedir</button>
+                        </div>
+                    </div>`;
+            });
+        }
+
+        window.pedir = (nome) => {
+            const phone = shopData.phone.replace(/\D/g,'');
+            window.open(`https://wa.me/${phone}?text=Olá, quero pedir: ${nome}`, '_blank');
+        }
+
+        carregarCardapio();
+    </script>
+</body>
+</html>
