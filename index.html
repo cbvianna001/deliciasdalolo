@@ -2,85 +2,110 @@
 <html lang="pt-BR">
 <head>
     <meta charset="UTF-8">
-    <title>Delícias da Lolo</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Delícias da Lolo ✨</title>
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600&display=swap" rel="stylesheet">
     <style>
-        body { background: #121212; color: #fff; font-family: sans-serif; margin: 0; padding-bottom: 80px; }
-        header { text-align: center; padding: 30px; }
-        .card { background: #fff; color: #333; border-radius: 20px; padding: 15px; margin: 10px; display: flex; justify-content: space-between; align-items: center; }
-        .btn-add { background: #E6A8B5; border: none; padding: 10px 20px; border-radius: 10px; cursor: pointer; font-weight: bold; }
-        #cart-bar { position: fixed; bottom: 0; width: 100%; background: #E6A8B5; color: #000; text-align: center; padding: 15px; font-weight: bold; cursor: pointer; display: none; }
-        .modal { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.9); display: none; padding: 20px; box-sizing: border-box; overflow-y: auto; }
-        input, select { width: 100%; padding: 10px; margin: 10px 0; border-radius: 5px; border: none; }
+        :root { --primary: #E6A8B5; --dark: #121212; --card-bg: #1e1e1e; }
+        body { background: var(--dark); color: #fff; font-family: 'Poppins', sans-serif; margin: 0; padding-bottom: 80px; }
+        header { text-align: center; padding: 40px 20px; }
+        
+        .grid { 
+            display: grid; 
+            grid-template-columns: repeat(auto-fill, minmax(160px, 1fr)); 
+            gap: 15px; 
+            padding: 20px; 
+            max-width: 600px; 
+            margin: auto; 
+        }
+
+        .card { 
+            background: var(--card-bg); 
+            border-radius: 20px; 
+            padding: 12px; 
+            text-align: center; 
+            border: 1px solid #333;
+        }
+
+        .card img { 
+            width: 100%; height: 120px; 
+            object-fit: cover; border-radius: 15px; margin-bottom: 10px;
+        }
+
+        .btn-add { 
+            background: var(--primary); color: #000; 
+            border: none; padding: 10px; border-radius: 10px; 
+            width: 100%; font-weight: bold; cursor: pointer;
+        }
+
+        #cart-bar { 
+            position: fixed; bottom: 0; width: 100%; 
+            background: var(--primary); color: #000; 
+            text-align: center; padding: 15px; font-weight: bold; 
+            cursor: pointer; z-index: 99; display: none;
+        }
+
+        .modal { 
+            position: fixed; top: 0; left: 0; width: 100%; height: 100%; 
+            background: rgba(0,0,0,0.95); display: none; padding: 20px; overflow-y: auto;
+        }
     </style>
 </head>
 <body>
 
-<header>
-    <h1 id="shop-title">Delícias da Lolo</h1>
-    <a href="https://instagram.com/dalolodelicias" style="color: #E6A8B5;">@dalolodelicias</a>
-</header>
+    <header>
+        <h1 id="shop-title">Delícias da Lolo</h1>
+        <p>✨ Doçura artesanal em cada detalhe</p>
+    </header>
 
-<div id="products-grid"></div>
+    <div class="grid" id="products-grid"></div>
 
-<div id="cart-bar" onclick="openModal()">Ver Carrinho (0 itens)</div>
+    <div id="cart-bar" onclick="openModal()">Ver Carrinho</div>
 
-<div id="modal" class="modal">
-    <div style="max-width: 400px; margin: auto;">
-        <h2>Finalizar Pedido</h2>
-        <div id="cart-items"></div>
-        <input type="text" id="nome" placeholder="Seu Nome">
-        <input type="text" id="end" placeholder="Seu Endereço">
-        <select id="pag">
-            <option value="Pix">Pix</option>
-            <option value="Dinheiro">Dinheiro</option>
-        </select>
-        <button class="btn-add" style="width:100%" onclick="finalizar()">Enviar Pedido no WhatsApp</button>
-        <button onclick="document.getElementById('modal').style.display='none'" style="width:100%; margin-top:10px; background:none; color:white; border:none;">Fechar</button>
+    <div id="modal" class="modal">
+        <div style="max-width: 400px; margin: auto;">
+            <h2>Finalizar Pedido</h2>
+            <div id="cart-items" style="margin-bottom:20px;"></div>
+            <input type="text" id="nome" placeholder="Seu Nome" style="width:100%; padding:10px; margin-bottom:10px;">
+            <input type="text" id="end" placeholder="Seu Endereço" style="width:100%; padding:10px; margin-bottom:10px;">
+            <button class="btn-add" onclick="finalizar()">Enviar Pedido no WhatsApp</button>
+            <button onclick="document.getElementById('modal').style.display='none'" style="width:100%; margin-top:10px; background:none; color:white; border:none;">Fechar</button>
+        </div>
     </div>
-</div>
 
-<script>
-    const JSON_URL = 'https://raw.githubusercontent.com/cbvianna001/deliciasdalolo/refs/heads/main/cardapio.json';
-    let cart = [], menuData = [], shopPhone = "";
+    <script>
+        // --- COLE O SEU LINK RAW DO GITHUB ABAIXO ---
+        const JSON_URL = 'COLE_SEU_LINK_RAW_AQUI'; 
+        let cart = [], menuData = [], shopPhone = "5512988203278";
 
-    async function load() {
-        const res = await fetch(JSON_URL);
-        const data = await res.json();
-        menuData = data.menu;
-        shopPhone = data.config.phone;
-        const grid = document.getElementById('products-grid');
-        menuData.forEach((i, idx) => {
-            grid.innerHTML += `<div class="card"><div><h3>${i.name}</h3><p>R$ ${i.price}</p></div><button class="btn-add" onclick="addToCart(${idx})">Adicionar</button></div>`;
-        });
-    }
+        async function load() {
+            try {
+                const res = await fetch(JSON_URL);
+                const data = await res.json();
+                menuData = data.menu;
+                const grid = document.getElementById('products-grid');
+                menuData.forEach((i, idx) => {
+                    grid.innerHTML += `<div class="card"><img src="${i.image}"><h3 style="font-size:14px">${i.name}</h3><p>R$ ${i.price}</p><button class="btn-add" onclick="addToCart(${idx})">Adicionar</button></div>`;
+                });
+            } catch(e) { console.error(e); }
+        }
 
-    function addToCart(idx) { cart.push(menuData[idx]); updateCart(); }
+        function addToCart(idx) { cart.push(menuData[idx]); document.getElementById('cart-bar').style.display = 'block'; }
 
-    function updateCart() {
-        const bar = document.getElementById('cart-bar');
-        bar.style.display = cart.length ? 'block' : 'none';
-        bar.innerText = `Ver Carrinho (${cart.length} itens) - Total: R$ ${cart.reduce((a,b)=>a+b.price, 0).toFixed(2)}`;
-    }
+        function openModal() {
+            document.getElementById('modal').style.display = 'block';
+            document.getElementById('cart-items').innerHTML = cart.map(i => `<p>${i.name} - R$ ${i.price}</p>`).join('');
+        }
 
-    function openModal() {
-        document.getElementById('modal').style.display = 'block';
-        const list = document.getElementById('cart-items');
-        list.innerHTML = cart.map(i => `<p>${i.name} - R$ ${i.price}</p>`).join('');
-    }
+        function finalizar() {
+            const nome = document.getElementById('nome').value;
+            const end = document.getElementById('end').value;
+            const msg = `Pedido de: ${nome}%0AEndereço: ${end}%0AItens: ${cart.map(i=>i.name).join(', ')}`;
+            window.open(`https://wa.me/${shopPhone}?text=${msg}`, '_blank');
+        }
 
-    function finalizar() {
-        const nome = document.getElementById('nome').value;
-        const end = document.getElementById('end').value;
-        const pag = document.getElementById('pag').value;
-        const total = cart.reduce((a,b)=>a+b.price, 0).toFixed(2);
-        const msg = `Pedido de: ${nome}\nEndereço: ${end}\nPagamento: ${pag}\nTotal: R$ ${total}\nItens: ${cart.map(i=>i.name).join(', ')}`;
-        window.open(`https://wa.me/${shopPhone}?text=${encodeURIComponent(msg)}`, '_blank');
-    }
-
-    load();
-</script>
+        load();
+    </script>
 </body>
 </html>
-
-            
