@@ -1,36 +1,43 @@
 <!DOCTYPE html>
-<html lang="pt-BR">
+<html lang="pt-PT">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
     <title>Delícias da Lolo ✨</title>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
     <style>
         :root { --primary: #E6A8B5; --dark: #121212; --card-bg: #1e1e1e; }
-        body { background: var(--dark); color: white; font-family: sans-serif; margin: 0; padding-bottom: 120px; }
-        header { text-align: center; padding: 20px; }
-        .grid { display: grid; grid-template-columns: 1fr 1fr; gap: 15px; padding: 15px; }
-        .card { background: var(--card-bg); padding: 10px; border-radius: 20px; text-align: center; }
-        .btn-add { background: var(--primary); color: #000; border: none; padding: 10px; border-radius: 10px; width: 100%; font-weight: bold; cursor: pointer; }
+        body { background: var(--dark); color: white; font-family: 'Poppins', sans-serif; margin: 0; padding-bottom: 150px; }
+        header { text-align: center; padding: 30px 20px; }
+        #logo { width: 120px; height: 120px; border-radius: 50%; border: 3px solid var(--primary); object-fit: cover; }
         
-        /* Ajuste crucial para o celular */
+        .grid { display: grid; grid-template-columns: 1fr 1fr; gap: 15px; padding: 15px; max-width: 600px; margin: auto; }
+        .card { background: var(--card-bg); padding: 15px; border-radius: 20px; text-align: center; border: 1px solid #333; }
+        
+        .btn-add { background: var(--primary); color: #000; border: none; padding: 12px; border-radius: 12px; width: 100%; font-weight: bold; cursor: pointer; }
+        
         #cart-bar { 
             position: fixed; bottom: 0; width: 100%; 
             background: var(--primary); color: #000; 
-            text-align: center; padding: 15px 0; font-weight: bold; 
-            cursor: pointer; z-index: 999;
-            box-shadow: 0 -2px 10px rgba(0,0,0,0.5);
+            text-align: center; padding: 20px 0; font-weight: bold; 
+            cursor: pointer; z-index: 999; box-shadow: 0 -5px 15px rgba(0,0,0,0.3);
         }
+        
         .modal { 
             position: fixed; top: 0; left: 0; width: 100%; height: 100%; 
-            background: rgba(0,0,0,0.95); display: none; padding: 20px; overflow-y: auto; z-index: 1000;
+            background: rgba(0,0,0,0.98); display: none; padding: 20px; 
+            overflow-y: auto; z-index: 2000; padding-bottom: 150px;
         }
+        .modal-content { max-width: 400px; margin: 40px auto; color: white; padding-bottom: 100px; }
     </style>
 </head>
 <body>
 
     <header>
+        <img src="logo.png" id="logo" onerror="this.style.display='none'">
         <h1 id="shop-title">Delícias da Lolo</h1>
         <p>✨ Doçura artesanal</p>
+        <a href="https://instagram.com/dalolodelicias" style="color:var(--primary); text-decoration:none;">@dalolodelicias</a>
     </header>
 
     <div class="grid" id="products-grid"></div>
@@ -38,14 +45,14 @@
     <div id="cart-bar" onclick="openModal()">Ver Carrinho</div>
 
     <div id="modal" class="modal">
-        <div style="max-width: 400px; margin: auto; color: white;">
+        <div class="modal-content">
             <h2>Finalizar Pedido</h2>
-            <div id="cart-items"></div>
+            <div id="cart-items" style="margin-bottom:20px;"></div>
             <h3 id="cart-total">Total: R$ 0.00</h3>
-            <input type="text" id="nome" placeholder="Seu Nome" style="width:100%; padding:10px; margin-bottom:10px;">
-            <input type="text" id="end" placeholder="Seu Endereço" style="width:100%; padding:10px; margin-bottom:10px;">
-            <button class="btn-add" onclick="finalizar()">Enviar Pedido no WhatsApp</button>
-            <button onclick="document.getElementById('modal').style.display='none'" style="width:100%; margin-top:10px; background:none; color:white; border:none;">Fechar</button>
+            <input type="text" id="nome" placeholder="Seu Nome" style="width:100%; padding:15px; margin-bottom:10px; border-radius:10px; border:none; box-sizing:border-box;">
+            <input type="text" id="end" placeholder="Seu Endereço" style="width:100%; padding:15px; margin-bottom:20px; border-radius:10px; border:none; box-sizing:border-box;">
+            <button class="btn-add" style="padding: 15px; font-size: 16px;" onclick="finalizar()">Enviar Pedido no WhatsApp</button>
+            <button onclick="document.getElementById('modal').style.display='none'" style="width:100%; margin-top:20px; padding:15px; background:#444; color:white; border:none; border-radius:10px;">Fechar</button>
         </div>
     </div>
 
@@ -54,13 +61,15 @@
         let cart = [], menuData = [];
 
         async function load() {
-            const res = await fetch(JSON_URL);
-            const data = await res.json();
-            menuData = data.menu;
-            const grid = document.getElementById('products-grid');
-            menuData.forEach((i, idx) => {
-                grid.innerHTML += `<div class="card"><img src="${i.image}" style="width:100%; height:100px; object-fit:cover; border-radius:10px;"><h3>${i.name}</h3><p>R$ ${i.price.toFixed(2)}</p><button class="btn-add" onclick="addToCart(${idx})">Adicionar</button></div>`;
-            });
+            try {
+                const res = await fetch(JSON_URL);
+                const data = await res.json();
+                menuData = data.menu;
+                const grid = document.getElementById('products-grid');
+                menuData.forEach((i, idx) => {
+                    grid.innerHTML += `<div class="card"><img src="${i.image}" style="width:100%; height:100px; object-fit:cover; border-radius:10px;"><h3>${i.name}</h3><p>R$ ${i.price.toFixed(2)}</p><button class="btn-add" onclick="addToCart(${idx})">Adicionar</button></div>`;
+                });
+            } catch(e) { console.error(e); }
         }
 
         function addToCart(idx) { 
