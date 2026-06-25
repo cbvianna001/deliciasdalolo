@@ -2,51 +2,50 @@
 <html lang="pt-PT">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Delícias da Lolo ✨</title>
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
     <style>
         :root { --primary: #E6A8B5; --dark: #121212; --card-bg: #1e1e1e; }
-        body { background: var(--dark); color: white; font-family: 'Poppins', sans-serif; margin: 0; padding-bottom: 150px; }
-        header { text-align: center; padding: 30px 20px; }
-        #logo { width: 120px; height: 120px; border-radius: 50%; border: 3px solid var(--primary); object-fit: cover; }
+        body { background: var(--dark); color: white; font-family: 'Poppins', sans-serif; margin: 0; padding-bottom: 50px; }
+        
+        /* Cabeçalho com o botão no topo direito */
+        header { 
+            text-align: center; padding: 20px; position: relative; 
+            display: flex; flex-direction: column; align-items: center; 
+        }
+        #cart-icon { 
+            position: absolute; top: 20px; right: 20px; 
+            font-size: 24px; color: var(--primary); cursor: pointer;
+        }
+
+        #logo { width: 100px; height: 100px; border-radius: 50%; border: 3px solid var(--primary); object-fit: cover; }
         
         .grid { display: grid; grid-template-columns: 1fr 1fr; gap: 15px; padding: 15px; max-width: 600px; margin: auto; }
-        .card { background: var(--card-bg); padding: 15px; border-radius: 20px; text-align: center; border: 1px solid #333; }
-        
-        .btn-add { background: var(--primary); color: #000; border: none; padding: 12px; border-radius: 12px; width: 100%; font-weight: bold; cursor: pointer; }
-        
-        #cart-bar { 
-            position: fixed; bottom: 0; width: 100%; 
-            background: var(--primary); color: #000; 
-            text-align: center; padding: 20px 0; font-weight: bold; 
-            cursor: pointer; z-index: 999; box-shadow: 0 -5px 15px rgba(0,0,0,0.3);
-        }
+        .card { background: var(--card-bg); padding: 12px; border-radius: 20px; text-align: center; border: 1px solid #333; }
+        .btn-add { background: var(--primary); color: #000; border: none; padding: 10px; border-radius: 10px; width: 100%; font-weight: bold; cursor: pointer; }
         
         .modal { 
             position: fixed; top: 0; left: 0; width: 100%; height: 100%; 
             background: rgba(0,0,0,0.98); display: none; padding: 20px; 
-            overflow-y: auto; z-index: 2000; padding-bottom: 150px;
+            overflow-y: auto; z-index: 2000;
         }
-        .modal-content { max-width: 400px; margin: 40px auto; color: white; padding-bottom: 100px; }
     </style>
 </head>
 <body>
 
     <header>
+        <div id="cart-icon" onclick="openModal()"><i class="fas fa-shopping-cart"></i></div>
         <img src="logo.png" id="logo" onerror="this.style.display='none'">
-        <h1 id="shop-title">Delícias da Lolo</h1>
-        <p>✨ Doçura artesanal</p>
+        <h1 id="shop-title" style="margin: 10px 0;">Delícias da Lolo</h1>
         <a href="https://instagram.com/dalolodelicias" style="color:var(--primary); text-decoration:none;">@dalolodelicias</a>
     </header>
 
     <div class="grid" id="products-grid"></div>
 
-    <div id="cart-bar" onclick="openModal()">Ver Carrinho</div>
-
     <div id="modal" class="modal">
-        <div class="modal-content">
-            <h2>Finalizar Pedido</h2>
+        <div style="max-width: 400px; margin: 40px auto; color: white;">
+            <h2>Seu Carrinho</h2>
             <div id="cart-items" style="margin-bottom:20px;"></div>
             <h3 id="cart-total">Total: R$ 0.00</h3>
             <input type="text" id="nome" placeholder="Seu Nome" style="width:100%; padding:15px; margin-bottom:10px; border-radius:10px; border:none; box-sizing:border-box;">
@@ -67,15 +66,15 @@
                 menuData = data.menu;
                 const grid = document.getElementById('products-grid');
                 menuData.forEach((i, idx) => {
-                    grid.innerHTML += `<div class="card"><img src="${i.image}" style="width:100%; height:100px; object-fit:cover; border-radius:10px;"><h3>${i.name}</h3><p>R$ ${i.price.toFixed(2)}</p><button class="btn-add" onclick="addToCart(${idx})">Adicionar</button></div>`;
+                    grid.innerHTML += `<div class="card"><img src="${i.image}" style="width:100%; height:80px; object-fit:cover; border-radius:10px;"><h3>${i.name}</h3><p>R$ ${i.price.toFixed(2)}</p><button class="btn-add" onclick="addToCart(${idx})">Adicionar</button></div>`;
                 });
             } catch(e) { console.error(e); }
         }
 
         function addToCart(idx) { 
             cart.push(menuData[idx]); 
-            document.getElementById('cart-bar').style.display = 'block'; 
             updateTotal();
+            alert(menuData[idx].name + " adicionado!");
         }
 
         function updateTotal() {
