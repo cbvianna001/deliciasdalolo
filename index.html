@@ -2,109 +2,85 @@
 <html lang="pt-BR">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Delícias da Lolo ✨</title>
+    <title>Delícias da Lolo</title>
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
-    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600&family=Pacifico&display=swap" rel="stylesheet">
     <style>
-        :root {
-            --primary: #E6A8B5;
-            --dark: #121212;
-            --glass: rgba(255, 255, 255, 0.05);
-            --text: #ffffff;
-        }
-
-        body { 
-            background: var(--dark); 
-            color: var(--text); 
-            font-family: 'Poppins', sans-serif;
-            margin: 0; padding: 0;
-            background: radial-gradient(circle at top, #2b2b2b, #000);
-            min-height: 100vh;
-        }
-
-        header { padding: 50px 20px; text-align: center; }
-        
-        #shop-logo-img { 
-            width: 130px; height: 130px; border-radius: 50%; 
-            border: 4px solid var(--primary); box-shadow: 0 0 30px rgba(230,168,181,0.4);
-            object-fit: cover; margin-bottom: 20px;
-        }
-
-        h1 { font-family: 'Pacifico', cursive; color: var(--primary); font-size: 2.5rem; margin: 0; }
-        
-        .recipe-box { 
-            background: var(--glass); backdrop-filter: blur(10px);
-            padding: 20px; border-radius: 20px; max-width: 350px; margin: 20px auto;
-            border: 1px solid rgba(255,255,255,0.1);
-        }
-
-        .grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(160px, 1fr)); gap: 15px; padding: 20px; max-width: 800px; margin: auto; }
-
-        .card { 
-            background: var(--glass); backdrop-filter: blur(5px);
-            border-radius: 25px; padding: 15px; text-align: center;
-            transition: 0.4s; border: 1px solid rgba(255,255,255,0.05);
-        }
-
-        .card:hover { transform: translateY(-10px); border-color: var(--primary); }
-
-        .card img { width: 100%; height: 120px; border-radius: 20px; object-fit: cover; margin-bottom: 10px; }
-
-        .btn-pedir { 
-            background: var(--primary); color: #000; border: none; padding: 10px 20px;
-            border-radius: 15px; font-weight: 600; cursor: pointer; width: 100%; margin-top: 10px;
-        }
-
-        .credits { text-align: center; padding: 40px; color: #555; font-size: 0.8rem; }
+        body { background: #121212; color: #fff; font-family: sans-serif; margin: 0; padding-bottom: 80px; }
+        header { text-align: center; padding: 30px; }
+        .card { background: #fff; color: #333; border-radius: 20px; padding: 15px; margin: 10px; display: flex; justify-content: space-between; align-items: center; }
+        .btn-add { background: #E6A8B5; border: none; padding: 10px 20px; border-radius: 10px; cursor: pointer; font-weight: bold; }
+        #cart-bar { position: fixed; bottom: 0; width: 100%; background: #E6A8B5; color: #000; text-align: center; padding: 15px; font-weight: bold; cursor: pointer; display: none; }
+        .modal { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.9); display: none; padding: 20px; box-sizing: border-box; overflow-y: auto; }
+        input, select { width: 100%; padding: 10px; margin: 10px 0; border-radius: 5px; border: none; }
     </style>
 </head>
 <body>
 
-    <header>
-        <img src="logo.png" id="shop-logo-img" onerror="this.style.display='none'">
-        <h1 id="shop-title">Delícias da Lolo</h1>
-        <p>✨ Doçura artesanal em cada detalhe</p>
-        
-        <div class="recipe-box">
-            📸 Siga <b>@dalolodelicias</b> para receitinhas fofas e bastidores!
-        </div>
-    </header>
+<header>
+    <h1 id="shop-title">Delícias da Lolo</h1>
+    <a href="https://instagram.com/dalolodelicias" style="color: #E6A8B5;">@dalolodelicias</a>
+</header>
 
-    <div class="grid" id="products-grid"></div>
+<div id="products-grid"></div>
 
-    <div class="credits">Feito com amor por @systemsjc_</div>
+<div id="cart-bar" onclick="openModal()">Ver Carrinho (0 itens)</div>
 
-    <script>
-        const JSON_URL = 'COLE_SEU_LINK_RAW_DO_GITHUB_AQUI';
-        const WHATSAPP = '5512988203278';
+<div id="modal" class="modal">
+    <div style="max-width: 400px; margin: auto;">
+        <h2>Finalizar Pedido</h2>
+        <div id="cart-items"></div>
+        <input type="text" id="nome" placeholder="Seu Nome">
+        <input type="text" id="end" placeholder="Seu Endereço">
+        <select id="pag">
+            <option value="Pix">Pix</option>
+            <option value="Dinheiro">Dinheiro</option>
+        </select>
+        <button class="btn-add" style="width:100%" onclick="finalizar()">Enviar Pedido no WhatsApp</button>
+        <button onclick="document.getElementById('modal').style.display='none'" style="width:100%; margin-top:10px; background:none; color:white; border:none;">Fechar</button>
+    </div>
+</div>
 
-        async function carregarCardapio() {
-            try {
-                const response = await fetch(JSON_URL);
-                const data = await response.json();
-                
-                document.getElementById('shop-title').innerText = data.config.name;
-                const grid = document.getElementById('products-grid');
-                
-                Object.values(data.menu).forEach(i => {
-                    grid.innerHTML += `
-                        <div class="card">
-                            <img src="${i.image}">
-                            <h3 style="margin:10px 0 5px">${i.name}</h3>
-                            <p style="color:var(--primary); font-weight:bold">R$ ${i.price}</p>
-                            <button class="btn-pedir" onclick="pedir('${i.name}')">Pedir Agora</button>
-                        </div>`;
-                });
-            } catch (e) { document.getElementById('shop-title').innerText = "Cardápio indisponível"; }
-        }
+<script>
+    const JSON_URL = 'https://raw.githubusercontent.com/cbvianna001/deliciasdalolo/refs/heads/main/cardapio.json';
+    let cart = [], menuData = [], shopPhone = "";
 
-        window.pedir = (nome) => {
-            window.open(`https://wa.me/${WHATSAPP}?text=Olá, quero pedir: ${nome}`, '_blank');
-        }
+    async function load() {
+        const res = await fetch(JSON_URL);
+        const data = await res.json();
+        menuData = data.menu;
+        shopPhone = data.config.phone;
+        const grid = document.getElementById('products-grid');
+        menuData.forEach((i, idx) => {
+            grid.innerHTML += `<div class="card"><div><h3>${i.name}</h3><p>R$ ${i.price}</p></div><button class="btn-add" onclick="addToCart(${idx})">Adicionar</button></div>`;
+        });
+    }
 
-        carregarCardapio();
-    </script>
+    function addToCart(idx) { cart.push(menuData[idx]); updateCart(); }
+
+    function updateCart() {
+        const bar = document.getElementById('cart-bar');
+        bar.style.display = cart.length ? 'block' : 'none';
+        bar.innerText = `Ver Carrinho (${cart.length} itens) - Total: R$ ${cart.reduce((a,b)=>a+b.price, 0).toFixed(2)}`;
+    }
+
+    function openModal() {
+        document.getElementById('modal').style.display = 'block';
+        const list = document.getElementById('cart-items');
+        list.innerHTML = cart.map(i => `<p>${i.name} - R$ ${i.price}</p>`).join('');
+    }
+
+    function finalizar() {
+        const nome = document.getElementById('nome').value;
+        const end = document.getElementById('end').value;
+        const pag = document.getElementById('pag').value;
+        const total = cart.reduce((a,b)=>a+b.price, 0).toFixed(2);
+        const msg = `Pedido de: ${nome}\nEndereço: ${end}\nPagamento: ${pag}\nTotal: R$ ${total}\nItens: ${cart.map(i=>i.name).join(', ')}`;
+        window.open(`https://wa.me/${shopPhone}?text=${encodeURIComponent(msg)}`, '_blank');
+    }
+
+    load();
+</script>
 </body>
 </html>
+
             
