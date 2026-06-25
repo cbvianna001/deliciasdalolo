@@ -1,10 +1,6 @@
 {
-  "config": {
-    "name": "Delícias da Lolo",
-    "phone": "5512988203278"
-  },
   "menu": [
-    { "id": 1, "name": "Mousse de Maracujá", "price": 10.00, "image": "URL_DA_IMAGEM" },
-    { "id": 2, "name": "Pavê Tradicional", "price": 12.00, "image": "URL_DA_IMAGEM" }
+    {"name": "Mousse", "price": 10.0, "image": "URL_DA_IMAGEM"},
+    {"name": "Pavê", "price": 12.0, "image": "URL_DA_IMAGEM"}
   ]
 }
