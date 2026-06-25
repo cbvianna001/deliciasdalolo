@@ -3,86 +3,195 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Delícias da Lolo</title>
+    <title>Delícias da Lolo | Doçura Artesanal</title>
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
-    <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;700;800&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;700;800&family=Pacifico&display=swap" rel="stylesheet">
     <style>
         :root { 
-            --chocolate: #7B4B3A; 
-            --rose: #E6A8B5; 
-            --rose-dark: #C98693; 
-            --cream-bg: #121212; 
-            --white: #ffffff; 
+            --chocolate: #5D3A3A; 
+            --rose: #F2BAC9; 
+            --rose-dark: #E6A8B5; 
+            --bg-dark: #121212; 
+            --card-soft: #FFF5f7; /* Um branco rosado bem fofinho */
             font-family: 'Nunito', sans-serif; 
         }
-        body { background: var(--cream-bg); color: var(--chocolate); margin: 0; padding-bottom: 90px; }
-        header { background: var(--white); padding: 25px; text-align: center; border-radius: 0 0 30px 30px; box-shadow: 0 4px 15px rgba(0,0,0,0.3); }
-        #shop-logo-img { width: 100px; height: 100px; border-radius: 50%; object-fit: cover; border: 3px solid var(--rose); margin-bottom: 10px; display: block; margin-left: auto; margin-right: auto; }
+
+        body { 
+            background-color: var(--bg-dark); 
+            color: #fff; 
+            margin: 0; 
+            padding-bottom: 50px;
+            background-image: radial-gradient(#222 1px, transparent 1px);
+            background-size: 20px 20px; /* Pontinhos discretos no fundo */
+        }
+
+        /* Header flutuante e fofo */
+        header { 
+            padding: 40px 20px; 
+            text-align: center; 
+            background: transparent;
+        }
+
+        #shop-logo-img { 
+            width: 120px; height: 120px; 
+            border-radius: 50%; 
+            object-fit: cover; 
+            border: 4px solid var(--rose); 
+            margin-bottom: 15px; 
+            box-shadow: 0 0 20px rgba(242, 186, 201, 0.3);
+            display: block; margin-left: auto; margin-right: auto;
+        }
+
+        #shop-title { 
+            font-family: 'Pacifico', cursive; 
+            font-size: 2.2rem; 
+            color: var(--rose); 
+            margin: 0; 
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.5);
+        }
+
+        .slogan {
+            font-size: 1.1rem;
+            color: #d1d1d1;
+            margin: 10px 0;
+            font-style: italic;
+        }
+
+        .insta-link {
+            display: inline-block;
+            margin-top: 10px;
+            text-decoration: none; 
+            color: var(--rose-dark); 
+            font-weight: bold;
+            background: rgba(230, 168, 181, 0.1);
+            padding: 8px 15px;
+            border-radius: 20px;
+            transition: 0.3s;
+        }
+
+        .recipe-alert {
+            background: #fff;
+            color: var(--chocolate);
+            margin: 20px auto;
+            padding: 10px;
+            border-radius: 15px;
+            font-size: 0.9rem;
+            max-width: 300px;
+            border-left: 5px solid var(--rose);
+            box-shadow: 0 4px 10px rgba(0,0,0,0.3);
+        }
+
         .container { max-width: 800px; margin: 0 auto; padding: 15px; }
-        .grid { display: grid; grid-template-columns: 1fr 1fr; gap: 15px; }
-        .card { background: var(--white); border-radius: 20px; overflow: hidden; display: flex; flex-direction: column; box-shadow: 0 4px 12px rgba(0,0,0,0.2); }
-        .card img { width: 100%; height: 130px; object-fit: cover; }
-        .card-body { padding: 12px; flex: 1; display: flex; flex-direction: column; }
-        .add-btn { background: var(--rose); color: var(--chocolate); padding: 10px; border-radius: 12px; cursor: pointer; border: none; font-weight: 700; margin-top: auto; }
-        .credits { text-align: center; margin-top: 40px; font-size: 0.9rem; color: #888; padding-bottom: 20px; }
-        .credits a { color: var(--rose); text-decoration: none; font-weight: bold; }
-        .nav-cats { overflow-x: auto; white-space: nowrap; padding: 20px 15px; position: sticky; top: 0; background: var(--cream-bg); display: flex; gap: 10px; }
-        .cat-btn { border: 2px solid var(--rose); background: var(--white); padding: 10px 18px; border-radius: 25px; font-weight: 700; color: var(--rose-dark); cursor: pointer; }
+        .grid { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; }
+
+        /* Cards mais fofos */
+        .card { 
+            background: var(--card-soft); 
+            border-radius: 30px; /* Bordas bem redondas */
+            overflow: hidden; 
+            display: flex; 
+            flex-direction: column; 
+            box-shadow: 0 8px 20px rgba(0,0,0,0.4);
+            border: none;
+            transition: transform 0.3s;
+        }
+
+        .card:hover { transform: translateY(-5px); }
+
+        .card img { width: 100%; height: 150px; object-fit: cover; }
+
+        .card-body { 
+            padding: 15px; 
+            flex: 1; 
+            display: flex; 
+            flex-direction: column; 
+            text-align: center;
+        }
+
+        .card h3 { color: var(--chocolate); margin: 0 0 10px 0; font-size: 1.2rem; }
+        .card b { color: var(--rose-dark); font-size: 1.3rem; margin-bottom: 15px; display: block;}
+
+        .add-btn { 
+            background: var(--rose); 
+            color: #fff; 
+            padding: 12px; 
+            border-radius: 20px; 
+            cursor: pointer; 
+            border: none; 
+            font-weight: 800; 
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            transition: 0.3s;
+        }
+
+        .add-btn:hover { background: var(--chocolate); }
+
+        .credits { text-align: center; margin-top: 50px; font-size: 0.8rem; color: #666; }
+        .credits a { color: var(--rose-dark); text-decoration: none; font-weight: bold; }
+
+        @media (max-width: 480px) {
+            .grid { grid-template-columns: 1fr; }
+            #shop-title { font-size: 1.8rem; }
+        }
     </style>
 </head>
 <body>
 
     <header>
         <img src="logo.png" id="shop-logo-img" onerror="this.style.display='none'">
-        <h2 id="shop-title" style="margin:0; font-weight:800; color:var(--chocolate);">Carregando...</h2>
-        <a href="https://instagram.com/dalolodelicias" target="_blank" style="text-decoration:none; color:var(--rose-dark); font-weight:bold;">
+        <h1 id="shop-title">Carregando...</h1>
+        <p class="slogan">✨ Doses extras de amor e açúcar em cada mordida!</p>
+        
+        <a href="https://instagram.com/dalolodelicias" target="_blank" class="insta-link">
             <i class="fab fa-instagram"></i> @dalolodelicias
         </a>
-    </header>
 
-    <div id="category-container" class="nav-cats"></div>
+        <div class="recipe-alert">
+            📸 No nosso Instagram postamos <b>receitinhas fofas</b> e o dia a dia da Lolo! Siga a gente! 🌸
+        </div>
+    </header>
 
     <div class="container">
         <div id="products-grid" class="grid"></div>
     </div>
 
     <div class="credits">
-        <p>Desenvolvido por <a href="https://instagram.com/systemsjc_" target="_blank">@systemsjc_</a></p>
+        <p>Criado com carinho por <a href="https://instagram.com/systemsjc_" target="_blank">@systemsjc_</a></p>
     </div>
 
     <script>
         // --- COPIE O SEU LINK "RAW" DO GITHUB E COLE AQUI ABAIXO ---
-        const JSON_URL = 'https://raw.githubusercontent.com/cbvianna001/deliciasdalolo/refs/heads/main/cardapio.json';
+        const JSON_URL = 'https://raw.githubusercontent.com/cbvianna001/deliciasdalolo/refs/heads/main/cardapio.json'; 
         
         let menuData = [], shopData = {};
 
         async function carregarCardapio() {
             try {
                 const response = await fetch(JSON_URL);
-                if (!response.ok) throw new Error("Erro ao acessar JSON");
+                if (!response.ok) throw new Error("Erro");
                 const data = await response.json();
                 
                 shopData = data.config;
                 document.getElementById('shop-title').innerText = shopData.name;
                 
                 menuData = Object.keys(data.menu).map(k => ({id: k, ...data.menu[k]}));
-                renderMenu('Todos');
+                renderMenu();
             } catch (e) {
-                document.getElementById('shop-title').innerText = "Erro ao carregar cardápio";
+                document.getElementById('shop-title').innerText = "Delícias da Lolo";
             }
         }
 
-        function renderMenu(cat) {
+        function renderMenu() {
             const grid = document.getElementById('products-grid'); 
             grid.innerHTML = '';
-            menuData.filter(i => cat === 'Todos' || i.category === cat).forEach(i => {
+            menuData.forEach(i => {
                 grid.innerHTML += `
                     <div class="card">
-                        <img src="${i.image}" onerror="this.src='https://via.placeholder.com/150'">
+                        <img src="${i.image}" onerror="this.src='https://via.placeholder.com/150?text=Doce+Fofinho'">
                         <div class="card-body">
                             <h3>${i.name}</h3>
                             <b>R$ ${parseFloat(i.price).toFixed(2)}</b>
-                            <button class="add-btn" onclick="pedir('${i.name}')">Pedir</button>
+                            <button class="add-btn" onclick="pedir('${i.name}')">Quero essa delícia! ✨</button>
                         </div>
                     </div>`;
             });
@@ -90,7 +199,8 @@
 
         window.pedir = (nome) => {
             const phone = shopData.phone.replace(/\D/g,'');
-            window.open(`https://wa.me/${phone}?text=Olá, quero pedir: ${nome}`, '_blank');
+            const texto = encodeURIComponent(`Olá! Vi no cardápio e fiquei apaixonada por: ${nome}. Poderia me atender? ✨`);
+            window.open(`https://wa.me/${phone}?text=${texto}`, '_blank');
         }
 
         carregarCardapio();
