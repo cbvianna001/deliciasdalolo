@@ -13,10 +13,12 @@
         #cart-icon { position: absolute; top: 30px; right: 20px; font-size: 24px; color: var(--primary); cursor: pointer; }
         #logo { width: 110px; height: 110px; border-radius: 50%; border: 4px solid var(--primary); object-fit: cover; }
 
+        .insta-destaque { background: rgba(230, 168, 181, 0.1); padding: 15px; border-radius: 20px; margin: 15px auto; max-width: 300px; border: 1px solid var(--primary); cursor: pointer; }
         .grid { display: grid; grid-template-columns: 1fr 1fr; gap: 15px; padding: 15px; max-width: 600px; margin: auto; }
-        .card { background: var(--card-bg); padding: 15px; border-radius: 25px; text-align: center; border: 1px solid #333; transition: 0.3s; }
+        .card { background: var(--card-bg); padding: 15px; border-radius: 25px; text-align: center; border: 1px solid #333; }
         .btn-add { background: var(--primary); color: #000; border: none; padding: 10px; border-radius: 15px; width: 100%; font-weight: bold; cursor: pointer; }
         
+        footer { text-align: center; padding: 30px; font-size: 0.9em; color: #888; }
         .modal { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.98); display: none; padding: 20px; z-index: 2000; overflow-y: auto; }
         .input-fofo { width: 100%; padding: 12px; margin: 8px 0; border-radius: 15px; border: none; background: #333; color: white; box-sizing: border-box; }
     </style>
@@ -27,19 +29,28 @@
         <div id="cart-icon" onclick="openModal()"><i class="fas fa-shopping-cart"></i></div>
         <img src="logo.png" id="logo" onerror="this.style.display='none'">
         <h1 style="margin: 10px 0;">Delícias da Lolo 🌸</h1>
-        <p>✨ Doçura artesanal em cada detalhe!</p>
+        <div class="insta-destaque" onclick="window.open('https://instagram.com/dalolodelicias')">
+            <p style="margin:0; font-weight:bold;">📸 Siga @dalolodelicias</p>
+            <small>Receitinhas e bastidores fofos!</small>
+        </div>
     </header>
 
     <div class="grid" id="products-grid"></div>
 
+    <footer>
+        <p>Desenvolvido com carinho por <br>
+        <a href="https://instagram.com/systemsjc_" style="color:var(--primary); font-weight:bold; text-decoration:none;">@systemsjc_</a></p>
+    </footer>
+
     <div id="modal" class="modal">
         <div style="max-width: 400px; margin: 40px auto;">
-            <h2>🛒 Sua Sacolinha</h2>
+            <h2>🛒 Finalizar Pedido</h2>
             <div id="cart-items" style="margin: 20px 0;"></div>
             <h3 id="cart-total">Total: R$ 0.00</h3>
             
             <input type="text" id="nome" class="input-fofo" placeholder="👤 Seu Nome">
             <input type="text" id="end" class="input-fofo" placeholder="🏠 Seu Endereço">
+            <textarea id="obs" class="input-fofo" placeholder="📝 Alguma observação? (Ex: sem açúcar)" rows="2"></textarea>
             
             <button class="btn-add" style="padding: 15px;" onclick="finalizar()">Enviar Pedido no WhatsApp 💖</button>
             <button onclick="document.getElementById('modal').style.display='none'" style="width:100%; margin-top:15px; background:none; color:white; border:none; cursor:pointer;">Continuar Comprando</button>
@@ -62,19 +73,12 @@
             } catch(e) { console.error("Erro ao carregar"); }
         }
 
-        function addToCart(idx) { 
-            cart.push(menuData[idx]); 
-            alert(menuData[idx].name + " adicionado à sacola! 🎀");
-        }
+        function addToCart(idx) { cart.push(menuData[idx]); alert(menuData[idx].name + " adicionado! 🎀"); }
 
         function openModal() {
             document.getElementById('modal').style.display = 'block';
-            let html = "";
-            let total = 0;
-            cart.forEach(i => {
-                html += `<p>🎀 ${i.name} - R$ ${i.price.toFixed(2)}</p>`;
-                total += i.price;
-            });
+            let html = "", total = 0;
+            cart.forEach(i => { html += `<p>🎀 ${i.name} - R$ ${i.price.toFixed(2)}</p>`; total += i.price; });
             document.getElementById('cart-items').innerHTML = html;
             document.getElementById('cart-total').innerText = `Total: R$ ${total.toFixed(2)}`;
         }
@@ -82,11 +86,11 @@
         function finalizar() {
             const nome = document.getElementById('nome').value;
             const end = document.getElementById('end').value;
+            const obs = document.getElementById('obs').value;
             const total = cart.reduce((sum, item) => sum + item.price, 0).toFixed(2);
             const itens = cart.map(i => i.name).join(', ');
             
-            const msg = `🎀 *Pedido Delícias da Lolo*%0A%0A👤 Cliente: ${nome}%0A🏠 Endereço: ${end}%0A%0A🛍️ Itens: ${itens}%0A💰 Total: R$ ${total}%0A%0A*Aguardando confirmação!* ✨`;
-            
+            const msg = `🎀 *Pedido Delícias da Lolo*%0A%0A👤 Cliente: ${nome}%0A🏠 Endereço: ${end}%0A📝 Obs: ${obs}%0A%0A🛍️ Itens: ${itens}%0A💰 Total: R$ ${total}%0A%0A*Aguardando confirmação!* ✨`;
             window.open(`https://wa.me/5512988203278?text=${msg}`, '_blank');
         }
         load();
